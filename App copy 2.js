@@ -37,10 +37,10 @@ export default function App() {
       </View>
 
       {/* Render Tugas */}
-      <View style={styles.viewTask}>
+      <View style={styles.viewTasks}>
         <CheckBox />
         <View style={styles.viewTaskContent}>
-          <Text style={styles.taskTitle}>Tugas</Text>
+          <Text style={styles.textTaskTitle}>Judul tugas</Text>
           <View style={styles.line} />
           <View>
             <TouchableOpacity
@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   btnOption: {
     width: 35,
     height: 35,
+    backgroundColor: 'aqua',
     borderRadius: 5,
     elevation: 3,
     alignItems: 'center',
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     height: 35,
     marginHorizontal: 15,
   },
-  taskTitle: {
+  textTaskTitle: {
     color: 'black',
     fontWeight: '500',
     fontSize: 15,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   },
   viewTaskContent: {
     backgroundColor: 'white',
-    elevation: 5,
+    elevation: 3,
     flexDirection: 'row',
     flex: 1,
     borderRadius: 10,
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 15,
   },
-  viewTask: {
+  viewTasks: {
     flexDirection: 'row',
     margin: 20,
     marginTop: 0,
@@ -191,12 +192,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 20,
   },
-  textHeaderTitle: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginHorizontal: 10,
-  },
   viewHeader: {
     backgroundColor: '#6600E7',
     height: 50,
@@ -204,5 +199,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
+  },
+  textHeaderTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginHorizontal: 10,
   },
 });
