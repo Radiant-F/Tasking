@@ -14,6 +14,42 @@ import CheckBox from '@react-native-community/checkbox';
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  const [newTask, setNewTask] = useState('');
+  function createTask() {
+    setTasks(tasks => {
+      return [{title: newTask, id: tasks.length + 1}, ...tasks];
+    });
+  }
+
+  function deleteTask(id) {
+    setTasks(tasks => {
+      return tasks.filter(task => task.id != id);
+    });
+  }
+
+  const [editedTask, setEditedTask] = useState({
+    title: '',
+    done: false,
+    id: null,
+  });
+  function editTask() {
+    setTasks(tasks => {
+      return tasks.map(task =>
+        task.id == editedTask.id ? {...task, title: editedTask.title} : task,
+      );
+    });
+    setModalVisible(false);
+  }
+
+  function checkTask(selectedId) {
+    setTasks(tasks => {
+      return tasks.map(task =>
+        task.id == selectedId ? {...task, done: !task.done} : task,
+      );
+    });
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -28,34 +64,49 @@ export default function App() {
       {/* Input Tugas */}
       <View style={styles.viewInput}>
         <View style={styles.viewTextInput}>
-          <TextInput placeholder="Buat tugas..." />
+          <TextInput placeholder="Buat tugas..." onChangeText={setNewTask} />
         </View>
         <View style={{width: 20}} />
-        <TouchableOpacity style={styles.btnAddTask}>
+        <TouchableOpacity style={styles.btnAddTask} onPress={createTask}>
           <Icon name={'plus'} size={27} color={'white'} />
         </TouchableOpacity>
       </View>
 
       {/* Render Tugas */}
-      <View style={styles.viewTasks}>
-        <CheckBox />
-        <View style={styles.viewTaskContent}>
-          <Text style={styles.textTaskTitle}>Judul tugas</Text>
-          <View style={styles.line} />
-          <View>
-            <TouchableOpacity
-              style={{...styles.btnOption, backgroundColor: '#6600E7'}}
-              onPress={() => setModalVisible(true)}>
-              <Icon name={'pencil'} size={21} color={'white'} />
-            </TouchableOpacity>
-            <View style={{height: 10}} />
-            <TouchableOpacity
-              style={{...styles.btnOption, backgroundColor: 'tomato'}}>
-              <Icon name={'trash-can'} size={21} color={'white'} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      {tasks.length == 0 && (
+        <Text style={{textAlign: 'center'}}>Tidak ada tugas</Text>
+      )}
+      {tasks.length != 0 &&
+        tasks.map(task => {
+          return (
+            <View key={task.id} style={styles.viewTask}>
+              <CheckBox
+                value={task.done}
+                onValueChange={() => checkTask(task.id)}
+              />
+              <View style={styles.viewTaskContent}>
+                <Text style={styles.taskTitle}>{task.title}</Text>
+                <View style={styles.line} />
+                <View>
+                  <TouchableOpacity
+                    style={{...styles.btnOption, backgroundColor: '#6600E7'}}
+                    onPress={() => {
+                      setModalVisible(true);
+                      setEditedTask(task);
+                    }}>
+                    <Icon name={'pencil'} size={21} color={'white'} />
+                  </TouchableOpacity>
+                  <View style={{height: 10}} />
+                  <TouchableOpacity
+                    style={{...styles.btnOption, backgroundColor: 'tomato'}}
+                    onPress={() => deleteTask(task.id)}>
+                    <Icon name={'trash-can'} size={21} color={'white'} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          );
+        })}
 
       {/* Modal Edit Tugas */}
       <Modal
@@ -82,9 +133,13 @@ export default function App() {
               placeholder="Edit tugas..."
               underlineColorAndroid={'#330074'}
               style={{marginHorizontal: 30, paddingHorizontal: 10}}
+              value={editedTask.title}
+              onChangeText={taskTitle =>
+                setEditedTask({...editedTask, title: taskTitle})
+              }
             />
             <View style={{height: 10}} />
-            <TouchableOpacity style={styles.btnEditTask}>
+            <TouchableOpacity style={styles.btnEditTask} onPress={editTask}>
               <Text style={styles.textBtnEdit}>Edit</Text>
             </TouchableOpacity>
           </View>
@@ -137,7 +192,6 @@ const styles = StyleSheet.create({
   btnOption: {
     width: 35,
     height: 35,
-    backgroundColor: 'aqua',
     borderRadius: 5,
     elevation: 3,
     alignItems: 'center',
@@ -149,7 +203,7 @@ const styles = StyleSheet.create({
     height: 35,
     marginHorizontal: 15,
   },
-  textTaskTitle: {
+  taskTitle: {
     color: 'black',
     fontWeight: '500',
     fontSize: 15,
@@ -157,7 +211,7 @@ const styles = StyleSheet.create({
   },
   viewTaskContent: {
     backgroundColor: 'white',
-    elevation: 3,
+    elevation: 5,
     flexDirection: 'row',
     flex: 1,
     borderRadius: 10,
@@ -166,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 15,
   },
-  viewTasks: {
+  viewTask: {
     flexDirection: 'row',
     margin: 20,
     marginTop: 0,
@@ -192,6 +246,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 20,
   },
+  textHeaderTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginHorizontal: 10,
+  },
   viewHeader: {
     backgroundColor: '#6600E7',
     height: 50,
@@ -199,11 +259,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
-  },
-  textHeaderTitle: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginHorizontal: 10,
   },
 });
