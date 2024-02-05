@@ -8,21 +8,24 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function TaskInput({onChangeText, value, onPress, disabled}) {
+export default function TaskInput({onChangeText, value, onPress, onSubmit}) {
   return (
     <View style={styles.viewInput}>
       <View style={styles.viewTextInput}>
         <TextInput
           placeholder="Buat tugas..."
+          placeholderTextColor={'grey'}
+          style={{color: 'black'}}
           onChangeText={onChangeText}
           value={value}
+          onSubmitEditing={onSubmit}
         />
       </View>
       <View style={{width: 20}} />
       <TouchableOpacity
         style={styles.btnAddTask}
         onPress={onPress}
-        disabled={disabled}>
+        disabled={value == ''}>
         <Icon name={'plus'} size={27} color={'white'} />
       </TouchableOpacity>
     </View>

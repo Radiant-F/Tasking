@@ -37,8 +37,13 @@ export default function ModalEditTask({
           </View>
           <TextInput
             placeholder="Edit tugas..."
+            placeholderTextColor={'grey'}
             underlineColorAndroid={'#330074'}
-            style={{marginHorizontal: 30, paddingHorizontal: 10}}
+            style={{
+              marginHorizontal: 30,
+              paddingHorizontal: 10,
+              color: 'black',
+            }}
             value={inputValue}
             onChangeText={onChangeText}
           />
