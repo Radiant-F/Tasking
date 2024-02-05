@@ -1,6 +1,7 @@
-import {Text, View, StatusBar, FlatList} from 'react-native';
-import React, {useState} from 'react';
-import {TaskInput, Task, ModalEditTask} from '../components';
+import {Text, View, StatusBar, FlatList, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Task, ModalEditTask, TaskInput} from '../components';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 export default function Home() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -8,16 +9,39 @@ export default function Home() {
 
   const [newTask, setNewTask] = useState('');
   function createTask() {
-    setTasks(tasks => {
-      return [{title: newTask, id: tasks.length + 1}, ...tasks];
-    });
+    const newTasks = [{title: newTask, id: Math.random()}, ...tasks];
+    setTasks(newTasks);
     setNewTask('');
   }
 
+  async function getTasks() {
+    try {
+      const tasks = await EncryptedStorage.getItem('tasks');
+
+      if (tasks) setTasks(JSON.parse(tasks));
+      else setTasks([]);
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  }
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  async function saveTasks() {
+    try {
+      await EncryptedStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    saveTasks();
+  }, [tasks]);
+
   function deleteTask(id) {
-    setTasks(tasks => {
-      return tasks.filter(task => task.id != id);
-    });
+    const filteredTasks = tasks.filter(task => task.id != id);
+    setTasks(filteredTasks);
   }
 
   const [editedTask, setEditedTask] = useState({
@@ -51,7 +75,7 @@ export default function Home() {
         onChangeText={setNewTask}
         value={newTask}
         onPress={createTask}
-        disabled={newTask == ''}
+        onSubmit={() => newTask != '' && createTask()}
       />
 
       {/* Render Tugas */}
