@@ -1,9 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Home from './src/screens/Home';
 import {Header} from './src/components';
+import RNBootSplash from 'react-native-bootsplash';
 
 export default function App() {
+  useEffect(() => {
+    RNBootSplash.hide({fade: true});
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <Header />
