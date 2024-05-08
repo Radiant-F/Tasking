@@ -10,6 +10,16 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+type ModalEditType = {
+  visible: boolean;
+  onRequestClose: () => void;
+  onBackdropPress: () => void;
+  onPressClose: () => void;
+  inputValue: string;
+  onChangeText: (title: string) => void;
+  onPressEdit: () => void;
+};
+
 export default function ModalEditTask({
   visible,
   onRequestClose,
@@ -18,7 +28,7 @@ export default function ModalEditTask({
   inputValue,
   onChangeText,
   onPressEdit,
-}) {
+}: ModalEditType): React.JSX.Element {
   return (
     <Modal
       visible={visible}

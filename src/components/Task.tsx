@@ -3,7 +3,23 @@ import React from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function Task({task, onPressCheck, onPressEdit, onPressDelete}) {
+type TaskType = {
+  task: {
+    title: string;
+    done: boolean;
+    id: number;
+  };
+  onPressCheck: () => void;
+  onPressEdit: () => void;
+  onPressDelete: () => void;
+};
+
+export default function Task({
+  task,
+  onPressCheck,
+  onPressEdit,
+  onPressDelete,
+}: TaskType): React.JSX.Element {
   return (
     <View key={task.id} style={styles.viewTask}>
       <CheckBox value={task.done} onValueChange={onPressCheck} />

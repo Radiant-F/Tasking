@@ -3,13 +3,22 @@ import React, {useState, useEffect} from 'react';
 import {Task, ModalEditTask, TaskInput} from '../components';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-export default function Home() {
+type TaskType = {
+  title: string;
+  id: number;
+  done: boolean;
+};
+
+export default function Home(): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Array<TaskType>>([]);
 
   const [newTask, setNewTask] = useState('');
   function createTask() {
-    const newTasks = [{title: newTask, id: Math.random()}, ...tasks];
+    const newTasks = [
+      {title: newTask, id: Math.random(), done: false},
+      ...tasks,
+    ];
     setTasks(newTasks);
     setNewTask('');
   }
@@ -17,7 +26,6 @@ export default function Home() {
   async function getTasks() {
     try {
       const tasks = await EncryptedStorage.getItem('tasks');
-
       if (tasks) setTasks(JSON.parse(tasks));
       else setTasks([]);
     } catch (error) {
@@ -39,15 +47,15 @@ export default function Home() {
     saveTasks();
   }, [tasks]);
 
-  function deleteTask(id) {
+  function deleteTask(id: number) {
     const filteredTasks = tasks.filter(task => task.id != id);
     setTasks(filteredTasks);
   }
 
-  const [editedTask, setEditedTask] = useState({
+  const [editedTask, setEditedTask] = useState<TaskType>({
     title: '',
     done: false,
-    id: null,
+    id: 0,
   });
   function editTask() {
     setTasks(tasks => {
@@ -58,7 +66,7 @@ export default function Home() {
     setModalVisible(false);
   }
 
-  function checkTask(selectedId) {
+  function checkTask(selectedId: number) {
     setTasks(tasks => {
       return tasks.map(task =>
         task.id == selectedId ? {...task, done: !task.done} : task,

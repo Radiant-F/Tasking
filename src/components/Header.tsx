@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function Header() {
+export default function Header(): React.JSX.Element {
   return (
     <View style={styles.viewHeader}>
       <Icon name={'notebook'} size={27} color={'white'} />

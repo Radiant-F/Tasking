@@ -4,7 +4,7 @@ import Home from './src/screens/Home';
 import {Header} from './src/components';
 import RNBootSplash from 'react-native-bootsplash';
 
-export default function App() {
+export default function App(): React.JSX.Element {
   useEffect(() => {
     RNBootSplash.hide({fade: true});
   }, []);

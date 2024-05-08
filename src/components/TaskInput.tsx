@@ -8,7 +8,19 @@ import {
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function TaskInput({onChangeText, value, onPress, onSubmit}) {
+type TaskInputType = {
+  onChangeText: (title: string) => void;
+  value: string;
+  onPress: () => void;
+  onSubmit: () => void;
+};
+
+export default function TaskInput({
+  onChangeText,
+  value,
+  onPress,
+  onSubmit,
+}: TaskInputType): React.JSX.Element {
   return (
     <View style={styles.viewInput}>
       <View style={styles.viewTextInput}>
@@ -26,7 +38,7 @@ export default function TaskInput({onChangeText, value, onPress, onSubmit}) {
         style={styles.btnAddTask}
         onPress={onPress}
         disabled={value == ''}>
-        <Icon name={'plus'} size={27} color={'white'} />
+        <Icon name={'plus-thick'} size={27} color={'white'} />
       </TouchableOpacity>
     </View>
   );
