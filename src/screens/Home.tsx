@@ -1,7 +1,9 @@
-import {Text, View, StatusBar, FlatList, Button} from 'react-native';
+import {Text, View, StatusBar, FlatList} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {Task, ModalEditTask, TaskInput} from '../components';
+import {TaskInput, RenderTask, ModalEdit} from '../components';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import styles from '../styles';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type TaskType = {
   title: string;
@@ -77,38 +79,44 @@ export default function Home(): React.JSX.Element {
   return (
     <View style={{flex: 1}}>
       <StatusBar backgroundColor={'#330074'} />
+      <View style={styles.viewHeader}>
+        <Icon name={'notebook'} size={27} color={'white'} />
+        <Text style={styles.textHeader}>Tasking App</Text>
+      </View>
 
-      {/* Input Tugas */}
-      <TaskInput
-        onChangeText={setNewTask}
-        value={newTask}
-        onPress={createTask}
-        onSubmit={() => newTask != '' && createTask()}
-      />
+      <View style={styles.container}>
+        {/* Input Tugas */}
+        <TaskInput
+          onChangeText={setNewTask}
+          value={newTask}
+          onPress={createTask}
+          onSubmit={() => newTask != '' && createTask()}
+        />
 
-      {/* Render Tugas */}
-      <FlatList
-        data={tasks}
-        ListEmptyComponent={() => (
-          <Text style={{textAlign: 'center'}}>Tidak ada tugas</Text>
-        )}
-        renderItem={({item: task}) => {
-          return (
-            <Task
-              task={task}
-              onPressCheck={() => checkTask(task.id)}
-              onPressDelete={() => deleteTask(task.id)}
-              onPressEdit={() => {
-                setModalVisible(true);
-                setEditedTask(task);
-              }}
-            />
-          );
-        }}
-      />
+        {/* Render Tugas */}
+        <FlatList
+          data={tasks}
+          ListEmptyComponent={() => (
+            <Text style={{textAlign: 'center'}}>Tidak ada tugas</Text>
+          )}
+          renderItem={({item: task}) => {
+            return (
+              <RenderTask
+                task={task}
+                onPressCheck={() => checkTask(task.id)}
+                onPressDelete={() => deleteTask(task.id)}
+                onPressEdit={() => {
+                  setModalVisible(true);
+                  setEditedTask(task);
+                }}
+              />
+            );
+          }}
+        />
+      </View>
 
       {/* Modal Edit Tugas */}
-      <ModalEditTask
+      <ModalEdit
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
