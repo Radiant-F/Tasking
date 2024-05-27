@@ -1,6 +1,6 @@
-import Header from './Header';
-import Task from './Task';
+import RenderTask from './RenderTask';
 import TaskInput from './TaskInput';
-import ModalEditTask from './ModalEditTask';
+import ModalEdit from './ModalEdit';
+import Gap from './Gap';
 
-export {Header, TaskInput, Task, ModalEditTask};
+export {TaskInput, RenderTask, ModalEdit, Gap};
